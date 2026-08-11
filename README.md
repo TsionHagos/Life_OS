@@ -1,73 +1,226 @@
-# 🧠 life-os
+# Life-OS — Voice Journal & Screen Time Dashboard
 
+A simple **AI-powered productivity dashboard** built with Streamlit that helps users understand their daily screen-time habits through data visualization and a voice journal.
+
+The application combines **screen-time tracking, voice transcription, and AI coaching** to provide personalized and actionable productivity advice.
+
+## Features
+
+* **Screen Time Dashboard**
+
+  * View daily screen-time by category.
+  * Track total screen time.
+  * Set a personal daily screen-time goal.
+  * Visualize usage with a bar chart.
+
+* **Voice Journal**
+
+  * Record a daily reflection directly in the browser.
+  * Convert the voice recording into text using OpenAI Whisper.
+  * View the generated transcript inside the dashboard.
+
+* **AI Productivity Coach**
+
+  * Analyzes both screen-time data and the user's reflection.
+  * Identifies possible reasons for excessive phone usage.
+  * Provides specific productivity recommendations.
+  * Suggests offline replacement activities.
+  * Gives encouraging, actionable feedback.
+
+## Technologies Used
+
+* **Python**
+* **Streamlit** — Web application framework
+* **Pandas** — Data processing
+* **OpenAI Whisper** — Voice transcription
+* **Google Gemini API** — AI productivity coaching
+* **streamlit-mic-recorder** — Browser-based audio recording
+* **python-dotenv** — Environment variable management
+
+## How It Works
+
+The application follows this workflow:
+
+```text
+User
+ │
+ ▼
+Screen-Time Dashboard
+ │
+ ├── Daily Usage Data
+ │
+ └── Daily Screen-Time Goal
+ │
+ ▼
+Voice Journal
+ │
+ └── Record Reflection
+          │
+          ▼
+       Whisper
+          │
+          ▼
+      Transcript
+          │
+          ▼
+   Gemini AI Coach
+          │
+          ▼
+ Personalized Productivity Advice
 ```
-$ whoami
-> a person who spends too much time on TikTok
 
-$ life-os --analyze --brutal-but-fair
+## Project Structure
 
-[SCANNING] screentime.csv .................. OK
-[LOADING]  14 days of data ................. OK
-[COACH]    Coach Atlas standing by .........  READY
-
-> WARNING: 3h 12m detected on Social Media today.
-> Suggestion: that's a workout + a home-cooked meal, reclaimed.
+```text
+Life_OS/
+│
+├── app.py
+├── requirements.txt
+├── .env
+├── .gitignore
+└── README.md
 ```
 
-## > what is this
+> **Important:** Never upload your `.env` file or API keys to GitHub.
 
-**Life-OS** is a Streamlit dashboard that turns a boring CSV of app usage
-into a full command-center: KPIs, trend charts, and an AI coach (Gemini)
-that reads your day and tells you the truth about it — then tells you
-what to do instead.
+## Installation
 
-## > stack
-
-```
-streamlit      → UI / dashboard
-pandas         → data wrangling
-google-genai   → Gemini API (the "coach")
-python-dotenv  → local secrets
-```
-
-## > run it locally
+### 1. Clone the repository
 
 ```bash
-$ git clone https://github.com/<your-username>/life-os.git
-$ cd life-os
-$ pip install -r requirements.txt
-$ cp .env.example .env      # then paste your real Gemini API key inside
-$ streamlit run app.py
+git clone YOUR_GITHUB_REPOSITORY_URL
+cd Assignment_7_New
 ```
 
-## > features
+### 2. Create a virtual environment
 
-```
-[x] 14-day synthetic screen time dataset (screentime.csv)
-[x] Sidebar: day selector + daily goal slider
-[x] KPI row: total time / most used app / delta vs. goal
-[x] Bar chart trend over 14 days + per-category breakdown
-[x] Gemini-powered coaching report (category-aware, not generic)
-[x] Severity-based st.warning / st.success rendering
-[x] Shareable accountability link via st.query_params
+```bash
+python3 -m venv .venv
 ```
 
-## > data schema (`screentime.csv`)
+### 3. Activate the virtual environment
 
-| Date       | App_Name | Category      | Minutes_Used |
-|------------|----------|---------------|--------------|
-| 2026-07-21 | TikTok   | Social Media  | 67           |
+macOS/Linux:
 
-## > deployment
-
-Deployed on **Streamlit Community Cloud**.
-Live app: `<paste your live URL here>`
-
-## > secrets
-
-`.env` is gitignored. On Streamlit Community Cloud, set `GEMINI_API_KEY`
-under **App settings → Secrets** instead of committing a `.env` file.
-
+```bash
+source .venv/bin/activate
 ```
-$ echo "never commit .env" >> life-lessons.log
+
+Windows:
+
+```bash
+.venv\Scripts\activate
 ```
+
+### 4. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+If you don't have a `requirements.txt` yet, install the main packages with:
+
+```bash
+pip install streamlit pandas openai-whisper google-genai streamlit-mic-recorder python-dotenv
+```
+
+### 5. Install FFmpeg
+
+Whisper requires FFmpeg to process audio files.
+
+On macOS with Homebrew:
+
+```bash
+brew install ffmpeg
+```
+
+Verify the installation:
+
+```bash
+ffmpeg -version
+```
+
+## 🔑 API Key Setup
+
+Create a file called `.env` in the project directory:
+
+```text
+GEMINI_API_KEY=your_gemini_api_key
+```
+
+The application loads the key using `python-dotenv`.
+
+Make sure `.env` is included in `.gitignore`:
+
+```text
+.env
+.venv/
+__pycache__/
+```
+
+## Running the Application
+
+Start the Streamlit application:
+
+```bash
+streamlit run app.py
+```
+
+Streamlit will provide a local URL, usually:
+
+```text
+http://localhost:8501
+```
+
+Open the URL in your browser.
+
+## Example Workflow
+
+1. Open the Life-OS dashboard.
+2. Set your daily screen-time goal.
+3. Review your screen-time breakdown.
+4. Click **Record Reflection**.
+5. Talk about your day and phone usage.
+6. Stop the recording.
+7. Whisper converts your recording into text.
+8. Click **Get Coaching**.
+9. Gemini analyzes your screen-time and reflection.
+10. Review your personalized productivity recommendations.
+
+## Security
+
+API credentials should never be hard-coded into the application.
+
+The project uses environment variables:
+
+```python
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+```
+
+The `.env` file should never be committed to GitHub.
+
+## Future Improvements
+
+Possible future improvements include:
+
+* Import real screen-time data instead of sample data.
+* Store journal entries from multiple days.
+* Add weekly and monthly screen-time trends.
+* Add persistent storage for journal entries.
+* Add user authentication.
+* Add personalized productivity goals.
+* Add productivity and habit analytics.
+* Deploy the application publicly.
+* Improve AI recommendations using historical user behavior.
+
+## Internship Project
+
+This project was developed as part of the **Mirai AI Summer Internship Program 2026**.
+
+The goal of the project is to explore how AI can be used to help users become more aware of their digital habits and encourage healthier relationships with technology.
+
+## 👩‍💻 Author
+
+**Tsion Hagos**
+
+Built with Python, Streamlit, Whisper, and Google Gemini.
